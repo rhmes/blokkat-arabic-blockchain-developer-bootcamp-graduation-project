@@ -4,7 +4,6 @@ pragma solidity ^0.8.19;
 import "forge-std/Test.sol";
 import {Vault} from "../src/Vault.sol";
 
-
 contract VaultTest is Test {
     Vault public vault;
 
@@ -17,7 +16,7 @@ contract VaultTest is Test {
 
     function testDeposit() public {
         vm.prank(user);
-        vault.deposit{value:1 ether}();
+        vault.deposit{value: 1 ether}();
         assertEq(vault.balances(user), 1 ether);
     }
 
@@ -41,6 +40,7 @@ contract VaultTest is Test {
         vault.withdraw(2 ether);
         vm.stopPrank();
     }
+
     function testGetBalanace() public {
         vm.startPrank(user);
         // deposit 0.5 ether
@@ -51,4 +51,3 @@ contract VaultTest is Test {
         assertEq(balance, 0.5 ether);
     }
 }
-
