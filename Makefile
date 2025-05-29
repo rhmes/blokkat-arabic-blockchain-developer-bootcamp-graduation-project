@@ -1,11 +1,24 @@
 -include .env
+build:
+	cd contracts && forge build
+
+test:
+	cd contracts && forge test
 
 deploy:
 	@echo "Deploying contracts..."
-	forge create Vault --private-key $(ANVIL_PRIVATE_KEY) --rpc-url $(ANVIL_RPC_URL) --broadcast # --chain-id $(RPC_CHAIN_ID) 
+	cd contracts && forge create Vault \
+	--rpc-url $(ANVIL_RPC_URL) \
+	--private-key $(ANVIL_PRIVATE_KEY) \
+	--chain-id $(RPC_CHAIN_ID) \
+	--broadcast
 	@echo "Contracts deployed successfully."
 
 deploy-script:
 	@echo "Deploying contracts (scripts)..."
-	forge script ./script/Volt.s.sol --private-key $(ANVIL_PRIVATE_KEY) --rpc-url $(ANVIL_RPC_URL) --broadcast # --chain-id $(RPC_CHAIN_ID) 
+	cd contracts && forge script ./script/Vault.s.sol \
+	--rpc-url $(ANVIL_RPC_URL) \
+	--private-key $(ANVIL_PRIVATE_KEY) \
+	--chain-id $(RPC_CHAIN_ID) \
+	--broadcast
 	@echo "Contracts deployed successfully."
