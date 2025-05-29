@@ -13,3 +13,10 @@ states/
 # Optional
 .env
 .env.local
+out/
+cache/
+broadcast/
+
+# OS files
+.DS_Store
+
