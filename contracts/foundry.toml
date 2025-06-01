@@ -4,6 +4,7 @@ out = "out"
 libs = ["lib"]
 remappings = [
     "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+    "@chainlink/contracts/=lib/chainlink-brownie-contracts/contracts/",
     ]
 # Read env vars
 fs_permissions = [{ access = "read", path = "../.env" }]
