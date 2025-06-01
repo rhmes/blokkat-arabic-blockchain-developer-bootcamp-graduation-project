@@ -29,9 +29,9 @@ contract USDStoreTest is Test {
         store.addProduct("Item A", 1000);
         (uint256 price, string memory name, bool exists) = store.products(0);
 
-        assertEq(price, 1000);       // Check price is set correctly
-        assertEq(name, "Item A");    // Check name is set correctly
-        assertTrue(exists);          // Check product existence flag
+        assertEq(price, 1000); // Check price is set correctly
+        assertEq(name, "Item A"); // Check name is set correctly
+        assertTrue(exists); // Check product existence flag
         assertEq(store.productCount(), 1); // Check product count incremented
     }
 
@@ -100,13 +100,7 @@ contract USDStoreTest is Test {
         uint256 productId = store.addProduct("Item D", 1000); // $10.00
 
         // Set up a valid price feed return
-        bytes memory returnData = abi.encode(
-            uint80(1),
-            int256(2000e8),
-            block.timestamp,
-            block.timestamp,
-            uint80(1)
-        );
+        bytes memory returnData = abi.encode(uint80(1), int256(2000e8), block.timestamp, block.timestamp, uint80(1));
 
         vm.mockCall(
             address(store.priceFeed()),
@@ -120,7 +114,8 @@ contract USDStoreTest is Test {
         // Call the payment with correct ETH
         store.payForProduct{value: requiredETH}(productId);
     }
-    // Test that getLatestETHUSD returns a valid price 
+    // Test that getLatestETHUSD returns a valid price
+
     function testGetLatestETHUSDReturnsValidPrice() public {
         // Mock Chainlink price feed to return $2000 (8 decimals)
         bytes memory returnData = abi.encode(uint80(1), int256(2000e8), block.timestamp, block.timestamp, uint80(1));
@@ -133,7 +128,8 @@ contract USDStoreTest is Test {
         uint256 price = store.getLatestETHUSD();
         assertEq(price, 2000e18); // 2000 USD in 18 decimals
     }
-    // Test that getPriceInETH returns the correct ETH price for a product  
+    // Test that getPriceInETH returns the correct ETH price for a product
+
     function testGetPriceInETHReturnsCorrectPrice() public {
         uint256 productId = store.addProduct("Item F", 1000); // $10.00
 
@@ -148,5 +144,4 @@ contract USDStoreTest is Test {
         uint256 priceInETH = store.getPriceInETH(productId);
         assertEq(priceInETH, 5000000000000000); // 0.005 ETH in wei
     }
-
 }
