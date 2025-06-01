@@ -1,17 +1,27 @@
 "use client";
-import React, {useEffect, useState} from "react";
-import { useReadContract, useWriteContract, useAccount, useWatchContractEvent, usePublicClient} from "wagmi";
-// import { parseEther } from "viem";
-import abi from '../abi/USDStore.abi.json';
-// import { readContract } from 'wagmi/actions';
+import React, { useEffect, useState } from "react";
+import {
+  useReadContract,
+  useWriteContract,
+  useWatchContractEvent,
+  usePublicClient,
+} from "wagmi";
+import { motion } from "framer-motion";
+import abi from "../abi/USDStore.abi.json";
+import AddProductForm from "@/components/AddProductForm";
+import PayProductForm from "@/components/PayProductForm";
+import ProductList from "@/components/ProductList";
+import ContractInfo from "@/components/ContractInfo";
+import ThemeToggle from "@/components/ThemeToggle";
+import WalletSection from "@/components/WalletSection";
 
 export default function Home() {
   const usdStoreContract = {
     address: "0x931aD472B5E0C2D7C56666bfb6e5E29A8EBeA40B",
     abi: abi,
     chainId: 534351, // Scroll Sepolia
-  }
-  // const { address, isConnected } = useAccount();
+  };
+
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [productId, setProductId] = useState(0);
@@ -56,41 +66,32 @@ export default function Home() {
       fetchAllProducts();
     },
   });
-  // Fetch all products from the contract
+
   const fetchAllProducts = async () => {
     if (!productCount) return;
     const count = Number(productCount);
     const fetched = [];
     for (let i = 0; i < count; i++) {
       try {
-        const p = await publicClient.readContract(
-          {
-            ...usdStoreContract,
-            functionName: "products",
-            args: [i],
-          },
-          {
-            chainId: usdStoreContract.chainId,
-          }
-        );
-      // If the product is not found, continue to the next iteration
-        if (!p || !p[2]) continue; // skip if not exists
+        const p = await publicClient.readContract({
+          ...usdStoreContract,
+          functionName: "products",
+          args: [i],
+        });
+
+        if (!p || !p[2]) continue;
+
         let p_inETH = 0;
         try {
-          p_inETH = await publicClient.readContract(
-            {
-              ...usdStoreContract,
-              functionName: "getPriceInETH",
-              args: [i],
-            },
-            {
-              chainId: usdStoreContract.chainId,
-            }
-          );
+          p_inETH = await publicClient.readContract({
+            ...usdStoreContract,
+            functionName: "getPriceInETH",
+            args: [i],
+          });
         } catch (err) {
           console.warn("Error fetching price in ETH for product", i, err);
-          // continue; // skip if error fetching price in ETH
         }
+
         fetched.push({ id: i, priceUSD: p[0], name: p[1], priceETH: p_inETH });
       } catch (err) {
         continue;
@@ -98,14 +99,14 @@ export default function Home() {
     }
     setProducts(fetched);
   };
-  // Use useEffect to fetch products when productCount changes
+
   useEffect(() => {
     if (productCount) fetchAllProducts();
   }, [productCount]);
-  // Handle adding a product request
+
   const handleAdd = async () => {
     if (!name || !price || isNaN(Number(price))) {
-    alert("Please enter a valid product name and price.");
+      alert("Please enter a valid product name and price.");
       return;
     }
     await writeContract({
@@ -113,12 +114,11 @@ export default function Home() {
       functionName: "addProduct",
       args: [name, Math.round(parseFloat(price) * 100)],
     });
-    // Immediately update products list
     fetchAllProducts();
     refetchBalanceFn();
     refetchETHPrice();
   };
-  // Handle payment for a product
+
   const handlePay = async () => {
     if (productId === undefined || productId === null || isNaN(Number(productId))) {
       alert("Please enter a valid product ID.");
@@ -134,76 +134,63 @@ export default function Home() {
       args: [productId],
       value: priceInETH as bigint,
     });
-    // Immediately update products list
     fetchAllProducts();
     refetchBalanceFn();
     refetchETHPrice();
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1 className="text-4xl font-bold">Welcome to the USD Store DApp</h1>
-
-      <div className="p-4 m-4">
-        <w3m-button />
-        <w3m-network-button />
+    <main className="flex min-h-screen flex-col items-center justify-start p-10 bg-white dark:bg-black text-black dark:text-white p-6">
+      <div className="flex justify-end p-4">
+        <ThemeToggle />
       </div>
-      <div className="max-w-xl mx-auto p-6 space-y-6">
-        <h1 className="text-2xl font-bold">USDStore DApp</h1>
+      <motion.h1
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="text-4xl font-bold text-center mb-8 text-indigo-600 dark:text-indigo-300"
+      >
+        USD Store DApp
+      </motion.h1>
 
-        {/* Add Product */}
-        <div className="p-4 border rounded-xl space-y-2">
-          <h2 className="text-lg font-semibold">Add Product</h2>
-          <input
-            className="border p-2 w-full rounded"
-            placeholder="Product Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <input
-            className="border p-2 w-full rounded"
-            placeholder="Price in USD (e.g., 29.99)"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-          />
-          <button onClick={handleAdd} className="bg-blue-500 text-white px-4 py-2 rounded">
-            Add Product
-          </button>
-        </div>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4 }}
+        className="flex space-x-4 mb-8"
+      >
+        <WalletSection />
+      </motion.div>
 
-        {/* Pay for Product */}
-        <div className="p-4 border rounded-xl space-y-2">
-          <h2 className="text-lg font-semibold">Pay for Product</h2>
-          <input
-            className="border p-2 w-full rounded"
-            type="number"
-            placeholder="Product ID"
-            value={productId}
-            onChange={(e) => setProductId(parseInt(e.target.value))}
-          />
-          <button onClick={handlePay} className="bg-green-600 text-white px-4 py-2 rounded">
-            Pay
-          </button>
-        </div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="grid md:grid-cols-2 gap-8 w-full max-w-4xl"
+      >
+        <AddProductForm
+          name={name}
+          price={price}
+          setName={setName}
+          setPrice={setPrice}
+          handleAdd={handleAdd}
+        />
+        <PayProductForm
+          productId={productId}
+          setProductId={setProductId}
+          handlePay={handlePay}
+        />
+      </motion.div>
 
-        {/* Products List */}
-        <div className="p-4 border rounded-xl space-y-2">
-          <h2 className="text-lg font-semibold">All Products</h2>
-          {products.map((p: any) => (
-            <div key={p.id} className="border p-2 rounded">
-              <p><strong>Name: {p.name}</strong></p>
-              <p>USD: ${Number(p.priceUSD) / 100}</p>
-              <p>ETH: ♦{Number(p.priceETH) / 1e18}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Contract Info */}
-        <div className="p-4 border rounded-xl">
-          <p>ETH/USD Price: {ethUsd ? Number(ethUsd) / 1e18 : "Loading..."}</p>
-          <p>Contract Balance: {balance ? Number(balance) / 1e18 : "Loading..."} ETH</p>
-        </div>
-      </div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.4 }}
+        className="w-full max-w-4xl"
+      >
+        <ProductList products={products} />
+        <ContractInfo ethUsd={ethUsd} balance={balance} />
+      </motion.div>
     </main>
   );
 }
