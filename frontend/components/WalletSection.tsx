@@ -1,14 +1,25 @@
 import { motion } from "framer-motion";
+import { useTheme } from 'next-themes';
+
 // import ThemeToggle from "./ThemeToggle";
 
 export default function WalletSection() {
+  const { resolvedTheme } = useTheme();
   return (
     <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className=" bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 dark:border-gray-800 rounded px-2 py-2 justify-center"
-      >
-      <div className="flex  gap-2 bg-indigo-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-2xl shadow-lg px-6 justify-center ">
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className={`rounded px-2 py-2 justify-center transition-colors duration-200
+        ${resolvedTheme === "dark"
+          ? "bg-gray-800 text-gray-100 border-gray-800"
+          : "bg-white text-gray-900 border-gray-200"}
+      `}
+    >
+      <div className={`flex gap-2 rounded-2xl shadow-lg px-6 justify-center transition-colors duration-200
+        ${resolvedTheme === "dark"
+          ? "bg-gray-900 text-gray-100"
+          : "bg-indigo-50 text-gray-900"}
+      `}>
         <w3m-button />
         <w3m-network-button />
       </div>

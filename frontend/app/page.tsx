@@ -14,6 +14,7 @@ import ProductList from "@/components/ProductList";
 import ContractInfo from "@/components/ContractInfo";
 import ThemeToggle from "@/components/ThemeToggle";
 import WalletSection from "@/components/WalletSection";
+import { useTheme } from 'next-themes';
 
 export default function Home() {
   const usdStoreContract = {
@@ -139,10 +140,21 @@ export default function Home() {
     refetchETHPrice();
   };
 
+  const { resolvedTheme } = useTheme();
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
   return (
-    <main className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <main className={`min-h-screen ${resolvedTheme === "dark" ? "bg-gray-800 text-gray-100" : "bg-white"}`} suppressHydrationWarning>
+      <div className="h md:h-4" />
       <motion.div
-        className="flex items-center justify-center gap-4 mt-8 "
+        className={`flex items-center justify-center gap-4 mt-8 ${resolvedTheme === "dark" ? "bg-gray-800 text-gray-100" : "bg-white"}`}
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -150,39 +162,39 @@ export default function Home() {
         <ThemeToggle />
       </motion.div>
       <motion.div
-        className="flex items-center justify-center gap-4 mt-8 "
+        className={`flex items-center justify-center gap-4 mt-8 ${resolvedTheme === "dark" ? "text-gray-400" : "text-gray-500"}`}
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <h1 className="text-3xl md:text-4xl font-extrabold text-indigo-700 dark:text-indigo-300 text-center drop-shadow-lg m-0 flex items-center">
+        <h1 className={`text-3xl md:text-4xl font-extrabold ${resolvedTheme === "dark" ? "text-indigo-300" : "text-indigo-700"} text-center drop-shadow-lg m-0 flex items-center`}>
           USD Store DApp
         </h1>
       </motion.div>
       <motion.div
-        className="flex items-center justify-center gap-4 mt-3 mb-10"
+        className={`flex items-center justify-center gap-4 mt-3 mb-10 ${resolvedTheme === "dark" ? "text-gray-400" : "text-gray-500"}`}
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <h3 className="text-lg text-gray-500 dark:text-gray-400 flex items-center gap-2">
+        <h3 className="text-lg flex items-center gap-2">
           <span role="img" aria-label="store">🛒</span>
-          Decentralized <span className="font-semibold text-indigo-600 dark:text-indigo-300">USD/ETH Store</span>
+          Decentralized <span className={`font-semibold ${resolvedTheme === "dark" ? "text-indigo-300" : "text-indigo-600"}`}>USD/ETH Store</span>
           <span className="hidden md:inline">&mdash; Powered by</span>
-          <span className="ml-1 font-mono text-xs bg-indigo-100 dark:bg-indigo-900 px-2 py-1 rounded">
+          <span className={`ml-1 font-mono text-xs px-2 py-1 rounded ${resolvedTheme === "dark" ? "bg-indigo-900" : "bg-indigo-100"}`}>
             Scroll Sepolia
           </span>
         </h3>
       </motion.div>
       <motion.div
-        className="max-w-5xl mx-auto flex flex-col md:flex-row gap-8"
+        className={`max-w-5xl mx-auto flex flex-col md:flex-row gap-8 rounded-3xl shadow-lg p-6 ${resolvedTheme === "dark" ? "bg-gray-900" : "bg-white"}`}
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
       >
         {/* Left side: WalletSection, ProductList and ContractInfo */}
         <motion.div
-          className="flex-1 flex flex-col gap-6 order-2 md:order-2"
+          className={`flex-1 flex flex-col gap-6 order-2 md:order-2 rounded-3xl p-6 ${resolvedTheme === "dark" ? "bg-gray-800" : "bg-white"}`}
           initial={{ opacity: 0, x: -40 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
@@ -190,7 +202,7 @@ export default function Home() {
           <WalletSection />
           <ContractInfo ethUsd={ethUsd} balance={balance} />
           <motion.div
-            className="flex-1 flex flex-col gap-6 md:order-2 "
+            className={`flex-1 flex flex-col gap-6 md:order-2 rounded-3xl p-6 ${resolvedTheme === "dark" ? "bg-gray-800" : "bg-white"}`}
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
@@ -200,7 +212,7 @@ export default function Home() {
         </motion.div>
         {/* Right side: AddProductForm, PayProductForm */}
         <motion.div
-          className="w-full md:w-80 flex flex-col gap-6 order-1 md:order-1"
+          className={`w-full md:w-80 flex flex-col gap-6 order-1 md:order-1 rounded-3xl p-6 ${resolvedTheme === "dark" ? "bg-gray-800" : "bg-white"}`}
           initial={{ opacity: 0, x: 40 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
@@ -219,6 +231,8 @@ export default function Home() {
           />
         </motion.div>
       </motion.div>
+      <div className="h-2 md:h-11" />
+
     </main>
   );
 }
