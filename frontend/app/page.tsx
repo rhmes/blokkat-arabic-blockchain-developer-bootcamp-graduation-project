@@ -11,11 +11,13 @@ import { motion } from "framer-motion";
 import abi from "../abi/USDStore.abi.json";
 import AddProductForm from "@/components/AddProductForm";
 import PayProductForm from "@/components/PayProductForm";
-import ProductList from "@/components/ProductList";
+import dynamic from "next/dynamic";
 import ContractInfo from "@/components/ContractInfo";
 import ThemeToggle from "@/components/ThemeToggle";
 import WalletSection from "@/components/WalletSection";
 import { useTheme } from 'next-themes';
+
+const ProductListClientOnly = dynamic(() => import("@/components/ProductListClientOnly"), { ssr: false });
 
 export default function Home() {
   const usdStoreContract = {
@@ -142,13 +144,13 @@ export default function Home() {
 
   const { resolvedTheme } = useTheme();
 
-  // const [mounted, setMounted] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  // useEffect(() => {
-  //   setMounted(true);
-  // }, []);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-  // if (!mounted) return null;
+  if (!mounted) return null;
 
   return (
     <main className={`min-h-screen ${resolvedTheme === "dark" ? "bg-gray-800 text-gray-100" : "bg-white"}`} suppressHydrationWarning>
@@ -207,7 +209,7 @@ export default function Home() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
-            <ProductList products={products} />
+            <ProductListClientOnly />
           </motion.div>
         </motion.div>
         {/* Right side: AddProductForm, PayProductForm */}
