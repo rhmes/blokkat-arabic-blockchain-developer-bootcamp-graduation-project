@@ -37,7 +37,6 @@ This project demonstrates the development, testing, and deployment of Ethereum s
 ├── Makefile               # Common development commands
 └── README.md              # Project documentation
 ```
-```
 
 ---
 
@@ -63,39 +62,45 @@ ETHERSCAN_API_KEY=your_etherscan_api_key
 ```
 ```
 ---
-## 🔒 Security & Design Patterns
+## 🔒 Security Measures & Design Patterns
 
-### Security Points
+### Design Patterns (as used in `contracts/src/USDStore.sol`)
 
-- **Checks-Effects-Interactions Pattern:**  
-    All external calls are made after state changes to prevent reentrancy attacks.
-- **Reentrancy Guard:**  
-    Critical functions use nonReentrant modifiers to block nested (reentrant) calls.
-- **Input Validation:**  
-    User inputs (such as purchase amounts and addresses) are validated to prevent invalid or malicious data.
-- **Access Control:**  
-    Only authorized accounts (e.g., contract owner) can perform sensitive operations like withdrawing funds or updating product lists.
-- **Use of SafeMath (if <0.8.0):**  
-    Arithmetic operations are checked for overflows/underflows (Solidity 0.8+ has built-in checks).
-- **External Price Feeds:**  
-    Chainlink oracles are used for reliable and tamper-resistant USD/ETH price data.
-- **Fail-Safe Withdrawals:**  
-    Withdrawal functions are protected to avoid accidental or malicious fund loss.
+1. **Ownership (Ownable Pattern):**  
+    Used to restrict sensitive functions (like `addProduct`, `withdraw`, `resetProducts`) to the contract owner via the `onlyOwner` modifier.
 
-### Design Patterns
+2. **Separation of Concerns:**  
+    Product management, payment logic, and price feed integration are implemented in separate functions for modularity and maintainability.
 
-- **Modular Contract Structure:**  
-    Contracts are split into logical components (e.g., Store, USDStore) for clarity and maintainability.
-- **Upgradeable Patterns (if used):**  
-    Proxy patterns or upgradable contracts can be implemented for future-proofing.
-- **Separation of Concerns:**  
-    Business logic, access control, and external integrations are separated for easier testing and auditing.
-- **Event Emission:**  
-    Key actions (purchases, withdrawals) emit events for transparency and off-chain tracking.
-- **Pull Over Push Payments:**  
-    Follows the pull payment pattern to let users withdraw funds, reducing risk of failed transfers.
+3. **Oracle Pattern:**  
+    Integrates Chainlink’s `AggregatorV3Interface` to fetch external ETH/USD price data.
 
-These practices help ensure the contracts are robust, secure, and maintainable.
+4. **Event Logging:**  
+    Emits events (`ProductPaid`, `ProductAdded`) for key actions, enabling off-chain tracking.
+
+5. **Pull Over Push for Withdrawals:**  
+    The owner must explicitly call `withdraw` to transfer funds, reducing reentrancy risk.
+
+6. **Fallback/Receive Function:**  
+    Implements `receive() external payable {}` to accept direct ETH transfers.
+
+### Security Measures (as used in `contracts/src/USDStore.sol`)
+
+1. **Using Specific Compiler Pragma:**  
+    The contract specifies `pragma solidity ^0.8.20;`, ensuring a recent, secure compiler version with built-in overflow/underflow protection.
+
+2. **Proper Use of Require:**  
+    - `require` is used to validate that only the owner can call sensitive functions (via `onlyOwner`).
+    - Ensures a product exists before allowing price queries or purchases.
+    - Checks that `msg.value` is sufficient for purchases.
+
+3. **Modifiers Only for Validation:**  
+    The `onlyOwner` modifier is used strictly to validate that only the contract owner can call `addProduct`, `withdraw`, and `resetProducts`.
+
+4. **Checks-Effects-Interactions Pattern:**  
+    - State changes (like incrementing `productCount`, emitting events) are performed before any external interactions.
+    - The `withdraw` function transfers ETH only after all checks and state changes are complete.
+
 ---
 
 ## 📚 Documentation & Important Links
@@ -140,14 +145,28 @@ $ make deploy
 
 
 
-### Local Node
+### Local Development
 
+#### Smart Contract Local Testing
+
+Start a local Ethereum node:
 ```shell
-anvil -- Smart contract local testing
+anvil
 ```
+
+Deploy contracts to the local node:
 ```shell
-npm dev run -- Frontend local testing
+make anvil-deploy
 ```
+
+#### Frontend Local Testing
+
+Start the frontend development server:
+```shell
+npm run dev
+```
+
+Access the frontend at: [http://localhost:3000/](http://localhost:3000/)
 
 ### Deploy
 
@@ -205,6 +224,15 @@ This helps ensure your contracts are well-tested and reliable.
 ```shell
 cast <subcommand>
 ```
+
+## 🎬 Demo
+
+Check out a walkthrough of the project in action:
+
+[![Watch the demo video]()
+
+- The demo covers the deployed the smart contract, interacting with the store, and using the frontend.
+- See how USD-priced products are purchased with ETH and how live price feeds work.
 
 ---
 
