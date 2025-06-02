@@ -9,7 +9,7 @@ deploy:
 	@echo "Deploying contracts (scripts)..."
 	cd contracts && forge script ./script/USDStore.s.sol \
 		--rpc-url $(RPC_URL) \
-		--private-key $(ANVIL_PRIVATE_KEY) \
+		--private-key $(PRIVATE_KEY) \
 		--chain-id $(RPC_CHAIN_ID) \
 		--broadcast \
 		--legacy
