@@ -1,11 +1,11 @@
 ## Blokkat Arabic Blockchain Developer Bootcamp Graduation Project
 
-A web3 project built as part of the Blokkat Bootcamp, leveraging modern Ethereum development tools and best practices.  
+A web3 project built as part of the Blokkat Bootcamp
 ---
 
 ## 🚀 Project Idea
 
-This project demonstrates the development, testing, and deployment of Ethereum smart contracts using the Foundry toolkit. It runs on the Scroll Sepolia testnet and integrates with Chainlink. It implements an online store where users can purchase USD-priced products using Ethereum. The smart contract, written in Solidity, handles USD-to-ETH conversion and payment logic. The contract can also mimic a products list for testing and payment purposes. Our service enables live USD/ETH price feeds and displays the current contract balance. The frontend is built with Next.js and uses the wagmi library for web3 interactions.
+This project showcases the full lifecycle of Ethereum smart contract development using the Foundry toolkit, deployed on the Scroll Sepolia testnet and integrated with Chainlink price feeds. It features an online store where users can seamlessly purchase products priced in USD, with real-time ETH conversion handled by the Solidity smart contract. The contract manages product listings, enforces secure payment logic, and provides live USD/ETH price updates, ensuring accurate transactions and transparent contract balances. The Next.js frontend, powered by the wagmi library, delivers a smooth web3 experience for users to interact with the store and monitor on-chain activity.
 
 
 ---
@@ -53,15 +53,14 @@ This project demonstrates the development, testing, and deployment of Ethereum s
 
 Copy `.env.example` to `.env` and fill in your values:
 
-```
 ```env
-RBC_URL=https://scroll-sepolia.blockpi.network/v1/rpc/YOUR_BLOCKPI_KEY
+RBC_URL=https://sepolia-rpc.scroll.io/
 CHAIN_ID=534351
 PRIVATE_KEY=your_private_key
-ETHERSCAN_API_KEY=your_etherscan_api_key
 ```
-```
+
 ---
+
 ## 🔒 Security Measures & Design Patterns
 
 ### Design Patterns (as used in `contracts/src/USDStore.sol`)
@@ -144,7 +143,6 @@ $ make deploy
     [`0x59F1ec1f10bD7eD9B938431086bC1D9e233ECf41`](https://sepolia.scrollscan.com/address/0x59F1ec1f10bD7eD9B938431086bC1D9e233ECf41)
 
 
-
 ### Local Development
 
 #### Smart Contract Local Testing
@@ -225,11 +223,13 @@ This helps ensure your contracts are well-tested and reliable.
 cast <subcommand>
 ```
 
+---
+
 ## 🎬 Demo
 
 Check out a walkthrough of the project in action:
 
-[![Watch the demo video]()
+![Watch the demo video]()
 
 - The demo covers the deployed the smart contract, interacting with the store, and using the frontend.
 - See how USD-priced products are purchased with ETH and how live price feeds work.
