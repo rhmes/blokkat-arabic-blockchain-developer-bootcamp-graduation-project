@@ -140,56 +140,84 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-start p-10 bg-white dark:bg-black text-black dark:text-white p-6">
-      <div className="flex justify-end p-4">
-        <ThemeToggle />
-      </div>
-      <motion.h1
+    <main className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+      <motion.div
+        className="flex items-center justify-center gap-4 mt-8 "
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="text-4xl font-bold text-center mb-8 text-indigo-600 dark:text-indigo-300"
       >
-        USD Store DApp
-      </motion.h1>
-
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.4 }}
-        className="flex space-x-4 mb-8"
-      >
-        <WalletSection />
+        <ThemeToggle />
       </motion.div>
-
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        className="flex items-center justify-center gap-4 mt-8 "
+        initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        className="grid md:grid-cols-2 gap-8 w-full max-w-4xl"
+        transition={{ duration: 0.6 }}
       >
-        <AddProductForm
-          name={name}
-          price={price}
-          setName={setName}
-          setPrice={setPrice}
-          handleAdd={handleAdd}
-        />
-        <PayProductForm
-          productId={productId}
-          setProductId={setProductId}
-          handlePay={handlePay}
-        />
+        <h1 className="text-3xl md:text-4xl font-extrabold text-indigo-700 dark:text-indigo-300 text-center drop-shadow-lg m-0 flex items-center">
+          USD Store DApp
+        </h1>
       </motion.div>
-
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
-        className="w-full max-w-4xl"
+        className="flex items-center justify-center gap-4 mt-3 mb-10"
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
       >
-        <ProductList products={products} />
-        <ContractInfo ethUsd={ethUsd} balance={balance} />
+        <h3 className="text-lg text-gray-500 dark:text-gray-400 flex items-center gap-2">
+          <span role="img" aria-label="store">🛒</span>
+          Decentralized <span className="font-semibold text-indigo-600 dark:text-indigo-300">USD/ETH Store</span>
+          <span className="hidden md:inline">&mdash; Powered by</span>
+          <span className="ml-1 font-mono text-xs bg-indigo-100 dark:bg-indigo-900 px-2 py-1 rounded">
+            Scroll Sepolia
+          </span>
+        </h3>
+      </motion.div>
+      <motion.div
+        className="max-w-5xl mx-auto flex flex-col md:flex-row gap-8"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+      >
+        {/* Left side: WalletSection, ProductList and ContractInfo */}
+        <motion.div
+          className="flex-1 flex flex-col gap-6 order-2 md:order-2"
+          initial={{ opacity: 0, x: -40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
+          <WalletSection />
+          <ContractInfo ethUsd={ethUsd} balance={balance} />
+          <motion.div
+            className="flex-1 flex flex-col gap-6 md:order-2 "
+            initial={{ opacity: 0, x: -40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
+            <ProductList products={products} />
+          </motion.div>
+        </motion.div>
+        {/* Right side: AddProductForm, PayProductForm */}
+        <motion.div
+          className="w-full md:w-80 flex flex-col gap-6 order-1 md:order-1"
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
+          <AddProductForm
+            name={name}
+            setName={setName}
+            price={price}
+            setPrice={setPrice}
+            handleAdd={handleAdd}
+          />
+          <PayProductForm
+            productId={productId}
+            setProductId={setProductId}
+            handlePay={handlePay}
+          />
+        </motion.div>
       </motion.div>
     </main>
   );
