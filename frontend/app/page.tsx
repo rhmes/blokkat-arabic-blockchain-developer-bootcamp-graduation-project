@@ -6,6 +6,7 @@ import {
   useWatchContractEvent,
   usePublicClient,
 } from "wagmi";
+import { Address } from "viem";
 import { motion } from "framer-motion";
 import abi from "../abi/USDStore.abi.json";
 import AddProductForm from "@/components/AddProductForm";
@@ -18,7 +19,7 @@ import { useTheme } from 'next-themes';
 
 export default function Home() {
   const usdStoreContract = {
-    address: "0x931aD472B5E0C2D7C56666bfb6e5E29A8EBeA40B",
+    address: "0x931aD472B5E0C2D7C56666bfb6e5E29A8EBeA40B" as Address,
     abi: abi,
     chainId: 534351, // Scroll Sepolia
   };
@@ -39,7 +40,6 @@ export default function Home() {
     ...usdStoreContract,
     functionName: "getPriceInETH",
     args: [productId],
-    watch: true,
   });
 
   const { data: balance, refetch: refetchBalanceFn } = useReadContract({
@@ -57,7 +57,7 @@ export default function Home() {
   useWatchContractEvent({
     ...usdStoreContract,
     eventName: "ProductAdded",
-    listener: () => {
+    onLogs: () => {
       refetchEthUsd();
       refetchETHPrice();
       refetchProductCount();
@@ -66,7 +66,7 @@ export default function Home() {
   });
 
   const fetchAllProducts = async () => {
-    if (!productCount) return;
+    if (!productCount || !publicClient) return;
     const count = Number(productCount);
     const fetched = [];
     for (let i = 0; i < count; i++) {
