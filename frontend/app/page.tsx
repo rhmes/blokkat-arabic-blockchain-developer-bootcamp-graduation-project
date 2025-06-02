@@ -142,13 +142,13 @@ export default function Home() {
 
   const { resolvedTheme } = useTheme();
 
-  const [mounted, setMounted] = useState(false);
+  // const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  // useEffect(() => {
+  //   setMounted(true);
+  // }, []);
 
-  if (!mounted) return null;
+  // if (!mounted) return null;
 
   return (
     <main className={`min-h-screen ${resolvedTheme === "dark" ? "bg-gray-800 text-gray-100" : "bg-white"}`} suppressHydrationWarning>
