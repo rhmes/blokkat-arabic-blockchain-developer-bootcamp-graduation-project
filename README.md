@@ -1,6 +1,7 @@
 ## Blokkat Arabic Blockchain Developer Bootcamp Graduation Project
 
 A web3 project built as part of the Blokkat Bootcamp
+
 ---
 
 ## 🚀 Project Idea
@@ -137,10 +138,10 @@ $ make deploy
     [`0x931aD472B5E0C2D7C56666bfb6e5E29A8EBeA40B`](https://sepolia.scrollscan.com/address/0x931aD472B5E0C2D7C56666bfb6e5E29A8EBeA40B)  
 
 - **Deployed Frontend:**  
-    [https://blokkat-store.vercel.app](https://blokkat-store.vercel.app)
+    [web3-store.vercel.app](https://blokkat-arabic-blockchain-developer-b-git-1e86ae-rhmes-projects.vercel.app)
 
-- **Chainlink Price Feed Address (Scroll Sepolia):**  
-    [`0x59F1ec1f10bD7eD9B938431086bC1D9e233ECf41`](https://sepolia.scrollscan.com/address/0x59F1ec1f10bD7eD9B938431086bC1D9e233ECf41)
+- **Chainlink Price Feed Address (Scroll Sepolia Testnet):**  
+    [`0x59F1ec1f10bD7eD9B938431086bC1D9e233ECf41`](https://docs.chain.link/data-feeds/price-feeds/addresses?page=1&testnetPage=1&network=scroll#:~:text=ETH%20/%20USD-,0x59F1ec1f10bD7eD9B938431086bC1D9e233ECf41,-ETH%20/%20USD)
 
 
 ### Local Development
