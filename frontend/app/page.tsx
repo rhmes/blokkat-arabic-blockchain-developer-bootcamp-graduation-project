@@ -27,7 +27,8 @@ export default function Home() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [productId, setProductId] = useState(0);
-  const [products, setProducts] = useState([]);
+  type Product = { id: number; priceUSD: number; name: string; priceETH: number };
+  const [products, setProducts] = useState<Product[]>([]);
 
   const publicClient = usePublicClient();
 
@@ -65,6 +66,8 @@ export default function Home() {
     },
   });
 
+  type ProductFromContract = [number, string, boolean]; // Adjust types as per your contract
+
   const fetchAllProducts = async () => {
     if (!productCount || !publicClient) return;
     const count = Number(productCount);
@@ -75,17 +78,17 @@ export default function Home() {
           ...usdStoreContract,
           functionName: "products",
           args: [i],
-        });
+        }) as ProductFromContract;
 
         if (!p || !p[2]) continue;
 
         let p_inETH = 0;
         try {
-          p_inETH = await publicClient.readContract({
+          p_inETH = Number(await publicClient.readContract({
             ...usdStoreContract,
             functionName: "getPriceInETH",
             args: [i],
-          });
+          }));
         } catch (err) {
           console.warn("Error fetching price in ETH for product", i, err);
         }
