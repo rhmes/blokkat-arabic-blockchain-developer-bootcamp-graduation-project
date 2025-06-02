@@ -5,16 +5,16 @@ import { useTheme } from "next-themes";
 
 export default function ProductList({ products }: any) {
   const { resolvedTheme } = useTheme();
-  if (!products.length) {
-    return (
-      <div
-        className={`rounded-2xl shadow p-4 text-center transition-colors duration-200
-        ${resolvedTheme === "dark" ? "bg-gray-900 text-gray-100 text-gray-500" : "bg-white text-gray-900 text-gray-400"}`}
-      >
-        No products available.
-      </div>
-    );
-  }
+  // if (!products.length) {
+  //   return (
+  //     <div
+  //       className={`rounded-2xl shadow p-4 text-center transition-colors duration-200
+  //       ${resolvedTheme === "dark" ? "bg-gray-900 text-gray-100 text-gray-500" : "bg-white text-gray-900 text-gray-400"}`}
+  //     >
+  //       No products available.
+  //     </div>
+  //   );
+  // }
   return (
     <div className="grid gap-2">
       {products.map((p: any) => (
