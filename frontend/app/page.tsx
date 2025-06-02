@@ -33,7 +33,6 @@ export default function Home() {
   const { data: productCount, refetch: refetchProductCount } = useReadContract({
     ...usdStoreContract,
     functionName: "productCount",
-    watch: true,
   });
 
   const { data: priceInETH, refetch: refetchETHPrice } = useReadContract({
@@ -46,13 +45,11 @@ export default function Home() {
   const { data: balance, refetch: refetchBalanceFn } = useReadContract({
     ...usdStoreContract,
     functionName: "getBalance",
-    watch: true,
   });
 
   const { data: ethUsd, refetch: refetchEthUsd } = useReadContract({
     ...usdStoreContract,
     functionName: "getLatestETHUSD",
-    watch: true,
   });
 
   const { writeContract } = useWriteContract();
