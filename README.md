@@ -229,10 +229,9 @@ cast <subcommand>
 ## 🎬 Demo
 
 Check out a walkthrough of the project in action:
+[![Watch the demo video](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://drive.google.com/file/d/1Ld_kHRwKvRbSxaZ562KyMNJMGx9rzHun/view?usp=sharing)
 
-![Watch the demo video]()
-
-- The demo covers the deployed the smart contract, interacting with the store, and using the frontend.
+- The demo covers the deployed smart contract, interacting with the store, and using the frontend.
 - See how USD-priced products are purchased with ETH and how live price feeds work.
 
 ---
